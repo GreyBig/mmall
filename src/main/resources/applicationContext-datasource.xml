@@ -1,620 +1,92 @@
-<!DOCTYPE html>
-<html>
-<head data-suburl="">
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	
-		<meta name="author" content="xiaoyue" />
-		<meta name="description" content="coding-96 - Java大牛 带你从0到上线开发企业级电商项目" />
-		<meta name="keywords" content="慕课网Git,代码托管,Git,Git代码托管,实战课源码">
-	
-	<meta name="referrer" content="no-referrer-when-downgrade" />
-	<meta name="_csrf" content="t--1bpu6D0CXFaUj-ze2G5xLq6c6MTY1MTY2MjQ5MjAwNDA0NDIyNw==" />
-	<meta name="_suburl" content="" />
-	
-	
-	
-		<meta property="og:url" content="https://git.imooc.com/xiaoyue/coding-96" />
-		<meta property="og:type" content="object" />
-		<meta property="og:title" content="xiaoyue/coding-96">
-		<meta property="og:description" content="Java大牛 带你从0到上线开发企业级电商项目">
-		<meta property="og:image" content="//img.mukewang.com/54584c910001b8d902200220-100-100.jpg" />
-	
-	
-	<link rel="shortcut icon" href="/img/favicon.ico" />
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<script src="/js/jquery-1.11.3.min.js"/>
-	<script src="/js/libs/jquery.are-you-sure.js"/>
-	<link rel="stylesheet" href="/assets/font-awesome-4.6.3/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/assets/font-imooc/css/font-less.css">
-	<link rel="stylesheet" href="/assets/font-imv2/css/style.css">
-	<link rel="stylesheet" href="/assets/octicons-4.3.0/octicons.min.css">
-	<link rel="stylesheet" href="/js/libs/moco/v1.0/dist/css/moco.min.css?v=1">
-	
-	
+	<context:component-scan base-package="com.mmall" annotation-config="true"/>
 
-	
-
-	
-	<link rel="stylesheet" href="/css/semantic-2.2.13.min.css">
-	<link rel="stylesheet" href="/css/gogs.css?v=ffd58de614cbac9361a58ea879831fad">
-	<link rel="stylesheet" href="/css/profie.css?v=ffd58de614cbac9361a58ea879831fad">
-	
-	<script src="/js/semantic-2.2.13.min.js"></script>
-	<script src="/js/gogs.js?v=ffd58de614cbac9361a58ea879831fad1"></script>
-	<script src="/js/libs/moco/v1.0/dist/js/moco.min.js?v=1"></script>
-
-	
-	<script type = "text/javascript">
-	(function() {
-		window.zhuge = window.zhuge || [];
-		window.zhuge.methods = "_init identify track getDid getSid getKey setSuperProperty setUserProperties setWxProperties setPlatform".split(" ");
-		window.zhuge.factory = function(b) {
-		return function() {
-			var a = Array.prototype.slice.call(arguments);
-			a.unshift(b);
-			window.zhuge.push(a);
-			return window.zhuge;
-		}
-		};
-		for (var i = 0; i < window.zhuge.methods.length; i++) {
-		var key = window.zhuge.methods[i];
-		window.zhuge[key] = window.zhuge.factory(key);
-		}
-		window.zhuge.load = function(b, x) {
-		if (!document.getElementById("zhuge-js")) {
-			var a = document.createElement("script");
-			var verDate = new Date();
-			var verStr = verDate.getFullYear().toString() + verDate.getMonth().toString() + verDate.getDate().toString();
-
-			a.type = "text/javascript";
-			a.id = "zhuge-js";
-			a.async = !0;
-			a.src = (location.protocol == 'http:' ? "http://sdk.zhugeio.com/zhuge.min.js?v=": 'https://zgsdk.zhugeio.com/zhuge.min.js?v=') + verStr;
-			a.onerror = function() {
-			window.zhuge.identify = window.zhuge.track = function(ename, props, callback) {
-				if(callback && Object.prototype.toString.call(callback) === '[object Function]') {
-				callback();
-				} else if (Object.prototype.toString.call(props) === '[object Function]') {
-				props();
-				}
-			};
-			};
-			var c = document.getElementsByTagName("script")[0];
-			c.parentNode.insertBefore(a, c);
-
-			window.zhuge._init(b, x)
-		}
-		};
-			window.zhuge.load('f375fe2f71e542a4b890d9a620f9fb32', {
-				superProperty: {
-					'应用名称': '诸葛io'
-				},
-				debug: false,
-				adTrack: false,
-				autoTrack: false,
-				singlePage: false
-			});
-	})();
-	</script>
-
-	<title>xiaoyue/coding-96: Java大牛 带你从0到上线开发企业级电商项目 - 慕课网Git</title>
-
-	<meta name="theme-color" content="#ff5343">
-
-	
-
-</head>
-<body>
-	<div class="full height">
-		<noscript>Please enable JavaScript in your browser!</noscript>
-
-		
-			<div class="following bar gray">
-
-				<div class="ui container">
-					<div class="ui grid">
-						<div class="column">
-							<div class="ui top secondary menu definemenu">
-								<a class="item brand" href="/">
-									<img class="ui mini image" src="/img/favicon.png">
-								</a>
-
-								
-									<a class="item" href="/issues">任务管理</a>
-									<a class="item" href="/pulls">合并请求</a>
-								
-
-								<a class="item" href="/explore/repos" style="display: none;">发现</a>
-
-								
-									<div class="right menu">
-									
-									
-										<div class="ui dropdown head link jump item poping up" data-variation="tiny inverted" style="height: 52px;">
-											<span class="text">
-												<i class="octicon octicon-plus"><span class="sr-only">创建...</span></i>
-												<i class="octicon octicon-triangle-down"></i>
-											</span>
-											<div class="menu">
-												<a class="item" href="/repo/create">
-													<i class="octicon octicon-plus"></i> 创建仓库
-												</a>
-												<a class="item" href="/repo/migrate">
-													<i class="octicon octicon-repo-clone"></i> 迁移外部仓库
-												</a>
-												
-												<a class="item" href="/org/create">
-													<i class="octicon octicon-organization"></i> 创建新的组织
-												</a>
-												
-											</div>
-										</div>
-									
-										<div class="ui dropdown head link jump item poping up mr0" tabindex="-1" data-variation="tiny inverted">
-											<span class="text avatar">
-												<img class="ui avatar image" src="//img.mukewang.com/54584c910001b8d902200220-100-100.jpg">
-												
-												<i class="ellipsis vertical icon" tabindex="-1"></i>
-											</span>
-											<div class="menu" tabindex="-1">
-												
-												<a class="item" href="/xiaoyue">
-													<i class="octicon octicon-person"></i>
-													个人主页
-												</a>
-												<a class=" item" href="/user/settings/ssh">
-													<i class="octicon octicon-settings"></i>
-													用户设置
-												</a>
-												<a class="item" target="_blank" href="//www.imooc.com/help/cate/27" rel="noreferrer">
-													<i class="octicon octicon-question"></i>
-													帮助
-												</a>
-												
-
-												<div class="divider"></div>
-												<a  class="item" href="//git.imooc.com/passport/user/logout?referer=//git.imooc.com">
-													<i class="octicon octicon-sign-out"></i>
-													退出
-												</a>
-											</div>
-										</div>
-									</div>
-
-								
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		
+	<bean id="propertyConfigurer"
+		  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="order" value="2"/>
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="locations">
+			<list>
+				<value>classpath:datasource.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="utf-8"/>
+	</bean>
 
 
-<div class="repository file list">
-	<div class="header-wrapper">
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${db.driverClassName}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialSize" value="${db.initialSize}"/>
+		<!-- 连接池的最大值 -->
+		<property name="maxActive" value="${db.maxActive}"/>
+		<!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 -->
+		<property name="maxIdle" value="${db.maxIdle}"/>
+		<!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+		<property name="minIdle" value="${db.minIdle}"/>
+		<!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为－1表示无限制 -->
+		<property name="maxWait" value="${db.maxWait}"/>
+		<!--#给出一条简单的sql语句进行验证 -->
+		<!--<property name="validationQuery" value="select getdate()" />-->
+		<property name="defaultAutoCommit" value="${db.defaultAutoCommit}"/>
+		<!-- 回收被遗弃的（一般是忘了释放的）数据库连接到连接池中 -->
+		<!--<property name="removeAbandoned" value="true" />-->
+		<!-- 数据库连接过多长时间不用将被视为被遗弃而收回连接池中 -->
+		<!--<property name="removeAbandonedTimeout" value="120" />-->
+		<!-- #连接的超时时间，默认为半小时。 -->
+		<property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}"/>
 
-	<div class="ui container">
-		<div class="ui vertically padded grid head">
-			<div class="column">
-				<div class="ui header">
-					<div class="ui huge breadcrumb">
-						<i class="mega-octicon octicon-lock"></i>
-						<a href="/xiaoyue">星星像幽灵</a>
-						<div class="divider"> / </div>
-						<a href="/xiaoyue/coding-96">coding-96</a>
-						
-						<div class="fork-flag">forked from <a href="/coding-96/coding-96">从0开始 独立完成企业级Java电商网站开发/coding-96</a></div>
-					</div>
+		<!--# 失效检查线程运行时间间隔，要小于MySQL默认-->
+		<property name="timeBetweenEvictionRunsMillis" value="40000"/>
+		<!--# 检查连接是否有效-->
+		<property name="testWhileIdle" value="true"/>
+		<!--# 检查连接有效性的SQL语句-->
+		<property name="validationQuery" value="SELECT 1 FROM dual"/>
+	</bean>
 
-					
-						<div class="ui right">
-							<div class="ui labeled button" tabindex="0">
-								<a class="ui basic button" href="/xiaoyue/coding-96/action/unwatch?redirect_to=%2fxiaoyue%2fcoding-96%2fsrc%2fmaster%2fsrc%2fmain%2fresources%2fapplicationContext-datasource.xml">
-									<i class="icon fa-eye"></i>取消关注
-								</a>
-								<a class="ui basic label" href="/xiaoyue/coding-96/watchers">
-									1
-								</a>
-							</div>
-							<div class="ui labeled button" tabindex="0">
-								<a class="ui basic button" href="/xiaoyue/coding-96/action/star?redirect_to=%2fxiaoyue%2fcoding-96%2fsrc%2fmaster%2fsrc%2fmain%2fresources%2fapplicationContext-datasource.xml">
-									<i class="icon fa-star-o"></i>点赞
-								</a>
-								<a class="ui basic label" href="/xiaoyue/coding-96/stars">
-									0
-								</a>
-							</div>
-							
-								<div class="ui labeled button" tabindex="0">
-									<a class="ui basic button poping up" href="/repo/fork/27942">
-										<i class="octicon octicon-repo-forked"></i>Fork
-									</a>
-									<a class="ui basic label" href="/xiaoyue/coding-96/forks">
-										0
-									</a>
-								</div>
-							
-						</div>
-					
-				</div>
-			</div>
-		</div>
-	</div>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
 
+		<!-- 分页插件 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=mysql
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
 
-	<div class="ui tabs container">
-		<div class="ui tabular menu navbar">
-			
-				<a class="active item" href="/xiaoyue/coding-96">
-					<i class="octicon octicon-file-text"></i> 代码
-				</a>
-			
-			
-			
-			
-			
-				<div class="right menu">
-					<a class=" item" href="/xiaoyue/coding-96/settings">
-						<i class="octicon octicon-tools"></i> 仓库设置
-					</a>
-				</div>
-			
-		</div>
-	</div>
-	<div class="ui tabs divider"></div>
+	</bean>
 
-</div>
+	<bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.mmall.dao"/>
+	</bean>
 
-	<div class="ui container">
-		
+	<!-- 使用@Transactional进行声明式事务管理需要声明下面这行 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="rollbackOnCommitFailure" value="true"/>
+	</bean>
 
 
-
-
-		<div style="position:relative;width:980px;height:36px;background:#fff9f5;font-size:12px;font-weight:400;font-family:PingFangSC-Regular;border:1px solid #ffd5a1;border-radius:4px;line-height:36px;margin-bottom:26px;color:#e98000;">
-			<div style="text-indent:15px;">温馨提示：Git用户名 / &nbsp;Username: xiaoyue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Git密码 / &nbsp;Password: 为慕课网登录密码</div>
-			<div style="position:absolute;top:0px;right:17px;font-size:14px;font-weight:400;">
-				<a style="color:#f20d0d;" href="https://www.imooc.com/user/newforgot" target="_blank">重置密码</a>
-			</div>
-		</div>
-		
-		<div class="ui secondary menu">
-			<div class="fitted item choose reference">
-	<div class="ui floating filter dropdown" data-no-results="未找到结果">
-			<div class="ui basic small button">
-			<span class="text">
-				<i class="octicon octicon-git-branch"></i>
-				分支:
-				<strong class="branch_text">master</strong>
-			</span>
-			<i class="dropdown icon"></i>
-		</div>
-		<div class="menu">
-			<div class="ui icon search input">
-				<i class="filter icon"></i>
-				<input name="search" placeholder="过滤分支或标签...">
-			</div>
-			<div class="header">
-				<div class="ui grid">
-					<div class="two column row">
-						<a class="reference column" href="#" data-target="#branch-list">
-							<span class="text black">
-								分支列表
-							</span>
-						</a>
-						<a class="reference column" href="#" data-target="#tag-list">
-							<span class="text ">
-								标签列表
-							</span>
-						</a>
-					</div>
-				</div>
-			</div>
-			<div id="branch-list" class="scrolling menu" >
-				
-					<div class="item selected" data-url="/xiaoyue/coding-96/src/master/src/main/resources/applicationContext-datasource.xml">master</div>
-				
-			</div>
-			<div id="tag-list" class="scrolling menu" style="display: none">
-				
-			</div>
-		</div>
-	</div>
-</div>
-
-			
-			
-				
-			
-			
-			<div class="fitted item">
-				
-				
-				
-					<div class="ui breadcrumb">
-						<a class="section" href="/xiaoyue/coding-96/src/master">coding-96</a>
-						
-							<div class="divider"> / </div>
-							
-								
-								<span class="section"><a href="/xiaoyue/coding-96/src/master/src">src</a></span>
-							
-						
-							<div class="divider"> / </div>
-							
-								
-								<span class="section"><a href="/xiaoyue/coding-96/src/master/src/main">main</a></span>
-							
-						
-							<div class="divider"> / </div>
-							
-								
-								<span class="section"><a href="/xiaoyue/coding-96/src/master/src/main/resources">resources</a></span>
-							
-						
-							<div class="divider"> / </div>
-							
-								<span class="active section">applicationContext-datasource.xml</span>
-							
-						
-					</div>
-				
-			</div>
-			<div class="right fitted item">
-				
-					<div id="file-buttons" class="ui tiny blue buttons">
-						
-						
-					</div>
-				
-
-				
-					
-			</div>
-		</div>
-		
-			<div id="file-content" class="tab-size-8">
-	<h4 class="ui top attached header" id="repo-read-file">
-		
-			<i class="file text outline icon ui left"></i>
-			<strong>applicationContext-datasource.xml</strong> <span class="text grey normal">4.9 KB</span>
-		
-		
-			<div class="ui right file-actions">
-				<div class="ui buttons">
-					
-						<a class="ui button" href="/xiaoyue/coding-96/src/7090d3b4c14fb2c47857b7a2882d5c198525b6e1/src/main/resources/applicationContext-datasource.xml">永久链接</a>
-					
-					<a class="ui button" href="/xiaoyue/coding-96/commits/master/src/main/resources/applicationContext-datasource.xml">文件历史</a>
-					<a class="ui button" href="/xiaoyue/coding-96/raw/master/src/main/resources/applicationContext-datasource.xml">原始文件</a>
-				</div>
-				
-					
-						<a href="/xiaoyue/coding-96/_edit/master/src/main/resources/applicationContext-datasource.xml"><i class="octicon octicon-pencil btn-octicon poping up"  data-content="编辑此文件" data-position="bottom center" data-variation="tiny inverted"></i></a>
-					
-					
-						<a href="/xiaoyue/coding-96/_delete/master/src/main/resources/applicationContext-datasource.xml"><i class="octicon octicon-trashcan btn-octicon btn-octicon-danger poping up"  data-content="删除此文件" data-position="bottom center" data-variation="tiny inverted"></i></a>
-					
-				
-			</div>
-		
-	</h4>
-	<div class="ui attached table segment">
-		<div id="" class="file-view code-view has-emoji">
-			
-				<table>
-					<tbody>
-						<tr>
-						
-							<td class="lines-num"><span id="L1">1</span><span id="L2">2</span><span id="L3">3</span><span id="L4">4</span><span id="L5">5</span><span id="L6">6</span><span id="L7">7</span><span id="L8">8</span><span id="L9">9</span><span id="L10">10</span><span id="L11">11</span><span id="L12">12</span><span id="L13">13</span><span id="L14">14</span><span id="L15">15</span><span id="L16">16</span><span id="L17">17</span><span id="L18">18</span><span id="L19">19</span><span id="L20">20</span><span id="L21">21</span><span id="L22">22</span><span id="L23">23</span><span id="L24">24</span><span id="L25">25</span><span id="L26">26</span><span id="L27">27</span><span id="L28">28</span><span id="L29">29</span><span id="L30">30</span><span id="L31">31</span><span id="L32">32</span><span id="L33">33</span><span id="L34">34</span><span id="L35">35</span><span id="L36">36</span><span id="L37">37</span><span id="L38">38</span><span id="L39">39</span><span id="L40">40</span><span id="L41">41</span><span id="L42">42</span><span id="L43">43</span><span id="L44">44</span><span id="L45">45</span><span id="L46">46</span><span id="L47">47</span><span id="L48">48</span><span id="L49">49</span><span id="L50">50</span><span id="L51">51</span><span id="L52">52</span><span id="L53">53</span><span id="L54">54</span><span id="L55">55</span><span id="L56">56</span><span id="L57">57</span><span id="L58">58</span><span id="L59">59</span><span id="L60">60</span><span id="L61">61</span><span id="L62">62</span><span id="L63">63</span><span id="L64">64</span><span id="L65">65</span><span id="L66">66</span><span id="L67">67</span><span id="L68">68</span><span id="L69">69</span><span id="L70">70</span><span id="L71">71</span><span id="L72">72</span><span id="L73">73</span><span id="L74">74</span><span id="L75">75</span><span id="L76">76</span><span id="L77">77</span><span id="L78">78</span><span id="L79">79</span><span id="L80">80</span><span id="L81">81</span><span id="L82">82</span><span id="L83">83</span><span id="L84">84</span><span id="L85">85</span><span id="L86">86</span><span id="L87">87</span><span id="L88">88</span><span id="L89">89</span><span id="L90">90</span><span id="L91">91</span><span id="L92">92</span></td>
-							<td class="lines-code"><pre><code class="xml"><ol class="linenums"><li class="L1" rel="L1">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</li>
-<li class="L2" rel="L2">&lt;beans xmlns=&#34;http://www.springframework.org/schema/beans&#34;</li>
-<li class="L3" rel="L3">       xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; xmlns:aop=&#34;http://www.springframework.org/schema/aop&#34;</li>
-<li class="L4" rel="L4">       xmlns:tx=&#34;http://www.springframework.org/schema/tx&#34; xmlns:jdbc=&#34;http://www.springframework.org/schema/jdbc&#34;</li>
-<li class="L5" rel="L5">       xmlns:context=&#34;http://www.springframework.org/schema/context&#34;</li>
-<li class="L6" rel="L6">       xsi:schemaLocation=&#34;</li>
-<li class="L7" rel="L7">     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd</li>
-<li class="L8" rel="L8">     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd</li>
-<li class="L9" rel="L9">     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd</li>
-<li class="L10" rel="L10">     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd&#34;&gt;</li>
-<li class="L11" rel="L11"></li>
-<li class="L12" rel="L12">    &lt;context:component-scan base-package=&#34;com.mmall&#34; annotation-config=&#34;true&#34;/&gt;</li>
-<li class="L13" rel="L13"></li>
-<li class="L14" rel="L14">    &lt;bean id=&#34;propertyConfigurer&#34;</li>
-<li class="L15" rel="L15">          class=&#34;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&#34;&gt;</li>
-<li class="L16" rel="L16">        &lt;property name=&#34;order&#34; value=&#34;2&#34;/&gt;</li>
-<li class="L17" rel="L17">        &lt;property name=&#34;ignoreUnresolvablePlaceholders&#34; value=&#34;true&#34;/&gt;</li>
-<li class="L18" rel="L18">        &lt;property name=&#34;locations&#34;&gt;</li>
-<li class="L19" rel="L19">            &lt;list&gt;</li>
-<li class="L20" rel="L20">                &lt;value&gt;classpath:datasource.properties&lt;/value&gt;</li>
-<li class="L21" rel="L21">            &lt;/list&gt;</li>
-<li class="L22" rel="L22">        &lt;/property&gt;</li>
-<li class="L23" rel="L23">        &lt;property name=&#34;fileEncoding&#34; value=&#34;utf-8&#34;/&gt;</li>
-<li class="L24" rel="L24">    &lt;/bean&gt;</li>
-<li class="L25" rel="L25"></li>
-<li class="L26" rel="L26"></li>
-<li class="L27" rel="L27">    &lt;bean id=&#34;dataSource&#34; class=&#34;org.apache.commons.dbcp.BasicDataSource&#34; destroy-method=&#34;close&#34;&gt;</li>
-<li class="L28" rel="L28">        &lt;property name=&#34;driverClassName&#34; value=&#34;${db.driverClassName}&#34;/&gt;</li>
-<li class="L29" rel="L29">        &lt;property name=&#34;url&#34; value=&#34;${db.url}&#34;/&gt;</li>
-<li class="L30" rel="L30">        &lt;property name=&#34;username&#34; value=&#34;${db.username}&#34;/&gt;</li>
-<li class="L31" rel="L31">        &lt;property name=&#34;password&#34; value=&#34;${db.password}&#34;/&gt;</li>
-<li class="L32" rel="L32">        &lt;!-- 连接池启动时的初始值 --&gt;</li>
-<li class="L33" rel="L33">        &lt;property name=&#34;initialSize&#34; value=&#34;${db.initialSize}&#34;/&gt;</li>
-<li class="L34" rel="L34">        &lt;!-- 连接池的最大值 --&gt;</li>
-<li class="L35" rel="L35">        &lt;property name=&#34;maxActive&#34; value=&#34;${db.maxActive}&#34;/&gt;</li>
-<li class="L36" rel="L36">        &lt;!-- 最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 --&gt;</li>
-<li class="L37" rel="L37">        &lt;property name=&#34;maxIdle&#34; value=&#34;${db.maxIdle}&#34;/&gt;</li>
-<li class="L38" rel="L38">        &lt;!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 --&gt;</li>
-<li class="L39" rel="L39">        &lt;property name=&#34;minIdle&#34; value=&#34;${db.minIdle}&#34;/&gt;</li>
-<li class="L40" rel="L40">        &lt;!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为－1表示无限制 --&gt;</li>
-<li class="L41" rel="L41">        &lt;property name=&#34;maxWait&#34; value=&#34;${db.maxWait}&#34;/&gt;</li>
-<li class="L42" rel="L42">        &lt;!--#给出一条简单的sql语句进行验证 --&gt;</li>
-<li class="L43" rel="L43">         &lt;!--&lt;property name=&#34;validationQuery&#34; value=&#34;select getdate()&#34; /&gt;--&gt;</li>
-<li class="L44" rel="L44">        &lt;property name=&#34;defaultAutoCommit&#34; value=&#34;${db.defaultAutoCommit}&#34;/&gt;</li>
-<li class="L45" rel="L45">        &lt;!-- 回收被遗弃的（一般是忘了释放的）数据库连接到连接池中 --&gt;</li>
-<li class="L46" rel="L46">         &lt;!--&lt;property name=&#34;removeAbandoned&#34; value=&#34;true&#34; /&gt;--&gt;</li>
-<li class="L47" rel="L47">        &lt;!-- 数据库连接过多长时间不用将被视为被遗弃而收回连接池中 --&gt;</li>
-<li class="L48" rel="L48">         &lt;!--&lt;property name=&#34;removeAbandonedTimeout&#34; value=&#34;120&#34; /&gt;--&gt;</li>
-<li class="L49" rel="L49">        &lt;!-- #连接的超时时间，默认为半小时。 --&gt;</li>
-<li class="L50" rel="L50">        &lt;property name=&#34;minEvictableIdleTimeMillis&#34; value=&#34;${db.minEvictableIdleTimeMillis}&#34;/&gt;</li>
-<li class="L51" rel="L51"></li>
-<li class="L52" rel="L52">        &lt;!--# 失效检查线程运行时间间隔，要小于MySQL默认--&gt;</li>
-<li class="L53" rel="L53">        &lt;property name=&#34;timeBetweenEvictionRunsMillis&#34; value=&#34;40000&#34;/&gt;</li>
-<li class="L54" rel="L54">        &lt;!--# 检查连接是否有效--&gt;</li>
-<li class="L55" rel="L55">        &lt;property name=&#34;testWhileIdle&#34; value=&#34;true&#34;/&gt;</li>
-<li class="L56" rel="L56">        &lt;!--# 检查连接有效性的SQL语句--&gt;</li>
-<li class="L57" rel="L57">        &lt;property name=&#34;validationQuery&#34; value=&#34;SELECT 1 FROM dual&#34;/&gt;</li>
-<li class="L58" rel="L58">    &lt;/bean&gt;</li>
-<li class="L59" rel="L59"></li>
-<li class="L60" rel="L60">    &lt;bean id=&#34;sqlSessionFactory&#34; class=&#34;org.mybatis.spring.SqlSessionFactoryBean&#34;&gt;</li>
-<li class="L61" rel="L61">        &lt;property name=&#34;dataSource&#34; ref=&#34;dataSource&#34;/&gt;</li>
-<li class="L62" rel="L62">        &lt;property name=&#34;mapperLocations&#34; value=&#34;classpath*:mappers/*Mapper.xml&#34;&gt;&lt;/property&gt;</li>
-<li class="L63" rel="L63"></li>
-<li class="L64" rel="L64">        &lt;!-- 分页插件 --&gt;</li>
-<li class="L65" rel="L65">        &lt;property name=&#34;plugins&#34;&gt;</li>
-<li class="L66" rel="L66">            &lt;array&gt;</li>
-<li class="L67" rel="L67">                &lt;bean class=&#34;com.github.pagehelper.PageHelper&#34;&gt;</li>
-<li class="L68" rel="L68">                    &lt;property name=&#34;properties&#34;&gt;</li>
-<li class="L69" rel="L69">                        &lt;value&gt;</li>
-<li class="L70" rel="L70">                            dialect=mysql</li>
-<li class="L71" rel="L71">                        &lt;/value&gt;</li>
-<li class="L72" rel="L72">                    &lt;/property&gt;</li>
-<li class="L73" rel="L73">                &lt;/bean&gt;</li>
-<li class="L74" rel="L74">            &lt;/array&gt;</li>
-<li class="L75" rel="L75">        &lt;/property&gt;</li>
-<li class="L76" rel="L76"></li>
-<li class="L77" rel="L77">    &lt;/bean&gt;</li>
-<li class="L78" rel="L78"></li>
-<li class="L79" rel="L79">    &lt;bean name=&#34;mapperScannerConfigurer&#34; class=&#34;org.mybatis.spring.mapper.MapperScannerConfigurer&#34;&gt;</li>
-<li class="L80" rel="L80">        &lt;property name=&#34;basePackage&#34; value=&#34;com.mmall.dao&#34;/&gt;</li>
-<li class="L81" rel="L81">    &lt;/bean&gt;</li>
-<li class="L82" rel="L82"></li>
-<li class="L83" rel="L83">    &lt;!-- 使用@Transactional进行声明式事务管理需要声明下面这行 --&gt;</li>
-<li class="L84" rel="L84">    &lt;tx:annotation-driven transaction-manager=&#34;transactionManager&#34; proxy-target-class=&#34;true&#34; /&gt;</li>
-<li class="L85" rel="L85">    &lt;!-- 事务管理 --&gt;</li>
-<li class="L86" rel="L86">    &lt;bean id=&#34;transactionManager&#34; class=&#34;org.springframework.jdbc.datasource.DataSourceTransactionManager&#34;&gt;</li>
-<li class="L87" rel="L87">        &lt;property name=&#34;dataSource&#34; ref=&#34;dataSource&#34;/&gt;</li>
-<li class="L88" rel="L88">        &lt;property name=&#34;rollbackOnCommitFailure&#34; value=&#34;true&#34;/&gt;</li>
-<li class="L89" rel="L89">    &lt;/bean&gt;</li>
-<li class="L90" rel="L90"></li>
-<li class="L91" rel="L91"></li>
-<li class="L92" rel="L92">&lt;/beans&gt;</li>
-</ol></code></pre></td>
-						
-						</tr>
-					</tbody>
-				</table>
-			
-		</div>
-	</div>
-</div>
-
-<script>
-function submitDeleteForm() {
-    var message = prompt("delete_confirm_message\n\ndelete_commit_summary", "Delete ''");
-    if (message != null) {
-        $("#delete-message").val(message);
-        $("#delete-file-form").submit()
-    }
-}
-</script>
-
-		
-	</div>
-</div>
-
-	</div>
-	
-	<div id="J_GotoTop" class="elevator">
-		<a href="//www.imooc.com/user/feedback" class="elevator-msg" target="_blank">
-			<i class="imv2-feedback"></i>
-			<span class="">意见反馈</span>
-		</a>
-		<a href="//www.imooc.com/help/cate/27" class="elevator-faq" target="_blank">
-			<i class="imv2-help icon blue"></i>
-			<span class="">帮助中心</span>
-		</a>
-		
-		<a href="javascript:void(0)" class="elevator-weixin no-goto" id="js-elevator-weixin" >
-			<i class="imv2-weixigzh"></i>
-			<span class="">官方微信</span>
-			<div class="elevator-weixin-box"></div>
-		</a>
-		<a href="javascript:void(0)" class="elevator-top no-goto" style="display:none" id="backTop">
-			<i class="imv2-arrow2_u"></i>
-			<span class="">返回顶部</span>
-		</a>
-	</div>
-	<footer>
-		<div class="ui container">
-			<div class="ui left">Copyright © 2018 imooc.com All Rights Reserved | 京ICP备 12003892号-11</div>
-			<div class="ui right links">
-				<div class="ui language bottom floating upward slide up dropdown link item">
-					<i class="world icon"></i>
-					<div class="text">简体中文</div>
-					<div class="menu">
-						
-							<a class="item active selected" href="#">简体中文</a>
-						
-							<a class="item " href="/xiaoyue/coding-96/src/master/src/main/resources/applicationContext-datasource.xml?lang=en-US">English</a>
-						
-							<a class="item " href="/xiaoyue/coding-96/src/master/src/main/resources/applicationContext-datasource.xml?lang=zh-HK">繁體中文</a>
-						
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-
-<script>
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?f0cfcccd7b1393990c78efdeebff3968";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-<script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
-</script>
-
-
-<div style="display: none;">
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?84d74dc9bf9efbc24efce88f71f831cb";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-
-</div>
-</body>
-
-
-
-	<link rel="stylesheet" href="/plugins/highlight-9.6.0/github.css">
-	<script src="/plugins/highlight-9.6.0/highlight.pack.js"></script>
-
-
-
-
-<script src="/js/libs/emojify-1.1.0.min.js"></script> 
-<script src="/js/libs/clipboard-1.5.9.min.js"></script>
-
-</html>
-
+</beans>
