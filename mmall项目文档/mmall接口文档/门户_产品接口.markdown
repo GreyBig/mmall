@@ -1,7 +1,6 @@
-[MENU]
+[TOC]
 
-
-####1.产品搜索及动态排序List
+#### 1.产品搜索及动态排序List
 
 **/product/list.do**
 
@@ -81,7 +80,7 @@ fail
 
 ------
 
-####2.产品detail
+#### 2.产品detail
 
 **/product/detail.do**
 
@@ -129,7 +128,7 @@ fail
 
 ------
 
-####模板
+#### 模板
 
 **/product/.do**
 

@@ -41,12 +41,12 @@ public class FTPUtil {
         //连接FTP服务器
         if(connectServer(this.ip,this.port,this.user,this.pwd)){
             try {
-                ftpClient.changeWorkingDirectory(remotePath);
-                ftpClient.setBufferSize(1024);
+                ftpClient.changeWorkingDirectory(remotePath);// 切换文件夹
+                ftpClient.setBufferSize(1024); // 设置缓冲区
                 ftpClient.setControlEncoding("UTF-8");
-                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-                ftpClient.enterLocalPassiveMode();
-                for(File fileItem : fileList){
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE); //文件类型设置为二进制类型，防止乱码
+                ftpClient.enterLocalPassiveMode(); // 打开本地被动模式
+                for(File fileItem : fileList){  // 正式上传
                     fis = new FileInputStream(fileItem);
                     ftpClient.storeFile(fileItem.getName(),fis);
                 }
@@ -56,8 +56,8 @@ public class FTPUtil {
                 uploaded = false;
                 e.printStackTrace();
             } finally {
-                fis.close();
-                ftpClient.disconnect();
+                fis.close(); // 关闭流
+                ftpClient.disconnect(); // 上传完后一定要释放连接，否则时间长了会出问题
             }
         }
         return uploaded;

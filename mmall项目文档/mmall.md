@@ -1,10 +1,12 @@
+[TOC]
+
 ## 用户模块
 
-**主要功能**
+### 主要功能
 
 登录、用户名验证、注册、忘记密码、提交问题答案、充值密码、获取用户信息、更新用户信息、退出登录
 
-**学习要点**
+### 学习要点
 
 * 横向越权、纵向越权安全漏洞
 * MD5铭文加密及增加salt值
@@ -12,9 +14,7 @@
 * 高服用服务相应对象的设计思想及抽象封装
 * Session的使用
 
-
-
-**横向越权、纵向越权安全漏洞**
+### 横向越权、纵向越权安全漏洞
 
 * 横向越权：攻击者尝试访问与他拥有相同权限的用户的资源
 
@@ -34,9 +34,7 @@
 
 * 纵向越权：低级别攻击者尝试访问高级别用户的资源
 
-
-
-##### 创建高复用的服务端响应泛型类
+### 创建高复用的服务端响应泛型类
 
 
 
@@ -46,7 +44,7 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
 
 ## 分类模块
 
-#### 功能介绍：
+### 功能介绍：
 
 * 获取节点
 * 增加节点
@@ -54,7 +52,7 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
 * 获取分类ID
 * 递归子节点ID
 
-#### 学习目标
+### 学习目标
 
 * **如何设计及封装无限层级的树状数据结构**
 
@@ -102,4 +100,292 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
     }
 
 ```
+
+
+
+## 商品管理模块开发
+
+这个模块的接口都要判断用户是否登录，因为是后台所以还要验证是否是管理员
+
+### 保存或更新产品
+
+1. 如果子图第一个不为空 就将第一个复制给主图
+2. 判断有无产品ID，如果有就更新产品，没有新增产品
+
+### 设置产品销售状态
+
+1. 产品ID和状态都不能为空
+2. 再使用Mapper的选择性更新 updateByPrimaryKeySelective
+
+### 产品详情
+
+1. 根据产品ID查询产品，所以产品ID不能为空
+
+### 产品list
+
+1. 使用PageHelper插件做分页，需要传入pageNum，pageSize
+
+2. 因为不需要Product的所有数据，所以用ProductListVo接收需要展示的数据
+
+   ```java
+           //startPage--start
+           //填充自己的sql查询逻辑
+           //pageHelper-收尾
+           PageHelper.startPage(pageNum,pageSize);
+   
+           List<Product> productList = productMapper.selectList();
+   		// Lists是guava的
+           List<ProductListVo> productListVoList = Lists.newArrayList();
+           for(Product productItem : productList){
+               ProductListVo productListVo = assembleProductListVo(productItem);
+               productListVoList.add(productListVo);
+           }
+           PageInfo pageResult = new PageInfo(productList);
+           pageResult.setList(productListVoList);
+           return ServerResponse.createBySuccess(pageResult);
+   ```
+
+   **productMapper.selectList()看起来是一次取全部数据，但事实上不是：**
+
+   pageHelper分页主要是通过 aop来实现，在执行sql之前会在sql语句中添加limit offset这两个参数。这样就完成了动态的分页。
+
+### 产品搜索
+
+1. 参数productName、productId、pageNum(default=1)、pageSize(default=10)
+
+2. pageNum与pageSize是给PageHelper做分页用
+
+3. 模糊匹配产品名称
+
+   ```java
+   if(StringUtils.isNotBlank(productName)){
+       productName = new StringBuilder().append("%").append(productName).append("%").toString();
+   }
+   List<Product> productList = productMapper.selectByNameAndProductId(productName,productId);
+   ...... // 后面分页和产品列表一样
+   ```
+
+4. mapper
+
+   ```xml
+   <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
+     SELECT
+     <include refid="Base_Column_List"/>
+     from mmall_product
+     <where>
+       <if test="productName != null">
+         and name like #{productName}
+       </if>
+       <if test="productId != null">
+         and id = #{productId}
+       </if>
+     </where>
+   </select>
+   ```
+
+### 图片上传
+
+Controller中的upload方法
+
+```java
+    @RequestMapping("upload.do")
+    @ResponseBody
+    public ServerResponse upload(HttpSession session,@RequestParam(
+        value = "upload_file",required = false) MultipartFile file,
+                                 HttpServletRequest request){
+		......// 验证是否登录
+        if(iUserService.checkAdminRole(user).isSuccess()){
+            // 设置上传文件的保存地址目录
+            String path = request.getSession().getServletContext().getRealPath("upload");
+            String targetFileName = iFileService.upload(file,path);
+            String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;
+
+            Map fileMap = Maps.newHashMap();
+            fileMap.put("uri",targetFileName);
+            fileMap.put("url",url);
+            return ServerResponse.createBySuccess(fileMap);
+        }else{
+            return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
+```
+
+FileServiceImpl
+
+```java
+@Service("iFileService")
+public class FileServiceImpl implements IFileService {
+    private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
+    public String upload(MultipartFile file,String path){
+        String fileName = file.getOriginalFilename();
+        //扩展名
+        //abc.jpg
+        String fileExtensionName = fileName.substring(fileName.lastIndexOf(".")+1);
+        String uploadFileName = UUID.randomUUID().toString()+"."+fileExtensionName;
+        logger.info("开始上传文件,上传文件的文件名:{},上传的路径:{},新文件名:{}",fileName,path,uploadFileName);
+        File fileDir = new File(path);
+        if(!fileDir.exists()){
+            fileDir.setWritable(true);
+            fileDir.mkdirs();
+        }
+        File targetFile = new File(path,uploadFileName);
+        try {
+            file.transferTo(targetFile);
+            //文件已经上传成功了
+            FTPUtil.uploadFile(Lists.newArrayList(targetFile));
+            //已经上传到ftp服务器上
+            targetFile.delete();
+        } catch (IOException e) {
+            logger.error("上传文件异常",e);
+            return null;
+        }
+        //A:abc.jpg
+        //B:abc.jpg
+        return targetFile.getName();
+    }
+
+}
+```
+
+FTPUtil工具
+
+```java
+package com.mmall.util;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * Created by geely
+ */
+public class FTPUtil {
+    private static  final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
+    private static String ftpIp = PropertiesUtil.getProperty("ftp.server.ip");
+    private static String ftpUser = PropertiesUtil.getProperty("ftp.user");
+    private static String ftpPass = PropertiesUtil.getProperty("ftp.pass");
+    public FTPUtil(String ip, int port, String user, String pwd){
+        this.ip = ip;
+        this.port = port;
+        this.user = user;
+        this.pwd = pwd;
+    }
+    public static boolean uploadFile(List<File> fileList) throws IOException {
+        FTPUtil ftpUtil = new FTPUtil(ftpIp,21,ftpUser,ftpPass);
+        logger.info("开始连接ftp服务器");
+        boolean result = ftpUtil.uploadFile("img",fileList);
+        logger.info("开始连接ftp服务器,结束上传,上传结果:{}");
+        return result;
+    }
+    private boolean uploadFile(String remotePath,List<File> fileList) throws IOException {
+        boolean uploaded = true;
+        FileInputStream fis = null;
+        //连接FTP服务器
+        if(connectServer(this.ip,this.port,this.user,this.pwd)){
+            try {
+                ftpClient.changeWorkingDirectory(remotePath);// 切换文件夹
+                ftpClient.setBufferSize(1024); // 设置缓冲区
+                ftpClient.setControlEncoding("UTF-8");
+                ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE); //文件类型设置为二进制类型，防止乱码
+                ftpClient.enterLocalPassiveMode(); // 打开本地被动模式
+                for(File fileItem : fileList){  // 正式上传
+                    fis = new FileInputStream(fileItem);
+                    ftpClient.storeFile(fileItem.getName(),fis);
+                }
+            } catch (IOException e) {
+                logger.error("上传文件异常",e);
+                uploaded = false;
+                e.printStackTrace();
+            } finally {
+                fis.close();
+                ftpClient.disconnect();
+            }
+        }
+        return uploaded;
+    }
+    private boolean connectServer(String ip,int port,String user,String pwd){
+        boolean isSuccess = false;
+        ftpClient = new FTPClient();
+        try {
+            ftpClient.connect(ip);
+            isSuccess = ftpClient.login(user,pwd);
+        } catch (IOException e) {
+            logger.error("连接FTP服务器异常",e);
+        }
+        return isSuccess;
+    }
+    private String ip;
+    private int port;
+    private String user;
+    private String pwd;
+    private FTPClient ftpClient;
+	,,,,,,// get和set方法
+}
+```
+
+#### SpringMVC上传文件的配置
+
+WEB-INF下的dispatcher-servlet.xml
+
+```xml
+    <!-- 文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/> <!-- 10m -->
+        <property name="maxInMemorySize" value="4096" />
+        <property name="defaultEncoding" value="UTF-8"></property>
+    </bean>
+```
+
+再配合MultipartFile完成上传工作
+
+### 富文本上传图片
+
+富文本用的simditor
+
+```java
+    @RequestMapping("richtext_img_upload.do")
+    @ResponseBody
+    public Map richtextImgUpload(HttpSession session, @RequestParam(value = "upload_file",required = false) MultipartFile file, HttpServletRequest request, HttpServletResponse response){
+        Map resultMap = Maps.newHashMap();
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user == null){
+            resultMap.put("success",false);
+            resultMap.put("msg","请登录管理员");
+            return resultMap;
+        }
+        //富文本中对于返回值有自己的要求,我们使用是simditor所以按照simditor的要求进行返回
+//        {
+//            "success": true/false,
+//                "msg": "error message", # optional
+//            "file_path": "[real file path]"
+//        }
+        if(iUserService.checkAdminRole(user).isSuccess()){
+            String path = request.getSession().getServletContext().getRealPath("upload");
+            String targetFileName = iFileService.upload(file,path);
+            if(StringUtils.isBlank(targetFileName)){
+                resultMap.put("success",false);
+                resultMap.put("msg","上传失败");
+                return resultMap;
+            }
+            String url = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;
+            resultMap.put("success",true);
+            resultMap.put("msg","上传成功");
+            resultMap.put("file_path",url);
+            // 返回的header是富文本要求的
+            response.addHeader("Access-Control-Allow-Headers","X-File-Name"); 
+            return resultMap;
+        }else{
+            resultMap.put("success",false);
+            resultMap.put("msg","无权限操作");
+            return resultMap;
+        }
+    }
+```
+
+## 前台商品详情
 
