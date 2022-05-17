@@ -1,4 +1,4 @@
-[TOC]
+[toc]
 
 ## 用户模块
 
@@ -18,29 +18,60 @@
 
 * 横向越权：攻击者尝试访问与他拥有相同权限的用户的资源
 
-  ```sql
-    <select id="checkPassword" resultType="int" parameterType="map">
+  ```xml
+    <!-- 查询时用count(1) 这里一定要加id字段，不然就可以用字典不断试密码 -->
+  <select id="checkPassword" resultType="int" parameterType="map">
       SELECT
         count(1)
       from mmall_user
       where password = #{password}
         and id = #{userId} 
     </select>
-    <!-- 查询时用count(1) 这里一定要加id字段，不然就可以用字典不断试密码 -->
-  
   ```
-
-  
-
-* 纵向越权：低级别攻击者尝试访问高级别用户的资源
+* 纵向越权：低级别攻击者尝试访问高级别用户的资源：检查是否是管理员才可操作某些权限
 
 ### 创建高复用的服务端响应泛型类
-
-
 
 ### Guava是什么？
 
 Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Collections Library"。这个库是为了方便编码，并减少编码错误。这个库用于提供集合，缓存，支持原语句，并发性，常见注解，字符串处理，I/O和验证的实用方法。
+
+### Guava缓存的使用
+
+使用Guava缓存Token，Token是在回答问题重置密码正确后生成的，修改密码时再验证Token
+
+```java
+public class TokenCache {
+    private static Logger logger = LoggerFactory.getLogger(TokenCache.class);
+    public static final String TOKEN_PREFIX = "token_";
+    //LRU算法
+    private static LoadingCache<String,String> localCache = CacheBuilder.newBuilder().initialCapacity(1000).maximumSize(10000).expireAfterAccess(12, TimeUnit.HOURS)
+            .build(new CacheLoader<String, String>() {
+                //默认的数据加载实现,当调用get取值的时候,如果key没有对应的值,就调用这个方法进行加载.
+                @Override
+                public String load(String s) throws Exception {
+                    return "null";
+                }
+            });
+
+    public static void setKey(String key,String value){
+        localCache.put(key,value);
+    }
+    public static String getKey(String key){
+        String value = null;
+        try {
+            value = localCache.get(key);
+            if("null".equals(value)){
+                return null;
+            }
+            return value;
+        }catch (Exception e){
+            logger.error("localCache get error",e);
+        }
+        return null;
+    }
+}
+```
 
 ## 分类模块
 
@@ -57,14 +88,11 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
 * **如何设计及封装无限层级的树状数据结构**
 
   分类表中的id为当前分类id，parent_id为父类别id，当parent_id为0时说明是根节点，一级级别
-
 * **递归算法的设计思想**
-
 * **如何处理复杂对象排重**
+* **重写hashcode和equal的注意事项**
 
-* **重写hashcode和equal的注意事项** 
-
-  使用Set方法可以排重使用Set集合存储对象时，`equals`和`hashCode`方法都要重写
+  使用Set方法可以排重使用Set集合存储对象时，`equals`和 `hashCode`方法都要重写
 
 **递归查询本节点的id及孩子节点的id**
 
@@ -101,30 +129,43 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
 
 ```
 
+## 后台商品管理模块
 
+### 后台功能
 
-## 商品管理模块开发
+* 商品列表 、商品搜索、图片上传、富文本上传、商品详情、商品上下架、增加商品、更新商品
+
+### 学习目标
+
+* FTP服务的对接
+* SringMVC文件上传
+* 流读取Properties配置文件
+* 抽象POJO、BO、VO对象直接的转换关系及解决思路
+* joda-time快速入门
+* 静态块
+* Myabtis-PageHelper高效准确地分页及动态排序
+* Mybatis对List遍历的实现方法
+* Mybatis对where语句动态拼接的几个版本
 
 这个模块的接口都要判断用户是否登录，因为是后台所以还要验证是否是管理员
 
-### 保存或更新产品
+#### 保存或更新产品
 
 1. 如果子图第一个不为空 就将第一个复制给主图
 2. 判断有无产品ID，如果有就更新产品，没有新增产品
 
-### 设置产品销售状态
+#### 设置产品销售状态
 
 1. 产品ID和状态都不能为空
 2. 再使用Mapper的选择性更新 updateByPrimaryKeySelective
 
-### 产品详情
+#### 产品详情
 
 1. 根据产品ID查询产品，所以产品ID不能为空
 
-### 产品list
+#### 产品list
 
 1. 使用PageHelper插件做分页，需要传入pageNum，pageSize
-
 2. 因为不需要Product的所有数据，所以用ProductListVo接收需要展示的数据
 
    ```java
@@ -132,7 +173,7 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
            //填充自己的sql查询逻辑
            //pageHelper-收尾
            PageHelper.startPage(pageNum,pageSize);
-   
+
            List<Product> productList = productMapper.selectList();
    		// Lists是guava的
            List<ProductListVo> productListVoList = Lists.newArrayList();
@@ -149,12 +190,10 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
 
    pageHelper分页主要是通过 aop来实现，在执行sql之前会在sql语句中添加limit offset这两个参数。这样就完成了动态的分页。
 
-### 产品搜索
+#### 产品搜索
 
 1. 参数productName、productId、pageNum(default=1)、pageSize(default=10)
-
 2. pageNum与pageSize是给PageHelper做分页用
-
 3. 模糊匹配产品名称
 
    ```java
@@ -164,7 +203,6 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
    List<Product> productList = productMapper.selectByNameAndProductId(productName,productId);
    ...... // 后面分页和产品列表一样
    ```
-
 4. mapper
 
    ```xml
@@ -183,7 +221,7 @@ Guava是一种基于开源的Java库，Google Guava源于2007年的"Google Colle
    </select>
    ```
 
-### 图片上传
+#### 图片上传
 
 Controller中的upload方法
 
@@ -250,20 +288,6 @@ public class FileServiceImpl implements IFileService {
 FTPUtil工具
 
 ```java
-package com.mmall.util;
-
-import org.apache.commons.net.ftp.FTPClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-
-/**
- * Created by geely
- */
 public class FTPUtil {
     private static  final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
     private static String ftpIp = PropertiesUtil.getProperty("ftp.server.ip");
@@ -343,7 +367,7 @@ WEB-INF下的dispatcher-servlet.xml
 
 再配合MultipartFile完成上传工作
 
-### 富文本上传图片
+#### 富文本上传图片
 
 富文本用的simditor
 
@@ -387,5 +411,87 @@ WEB-INF下的dispatcher-servlet.xml
     }
 ```
 
-## 前台商品详情
+## 前台商品管理模块
 
+### 前台功能
+
+* 产品搜索、动态排序列表、产品详情
+
+#### 商品详情
+
+1. productId不能为空
+2. 如果查询出来的产品为空，则是下架或删除
+3. 判断产品的status，如果不为1则是下架或删除
+4. 用assembleProductDetailVo方法将product存入productDetailVo
+
+#### 产品搜索及动态排序List
+
+## 购物车模块
+
+### 功能介绍：
+
+* 加入商品、更新商品数、查询商品数、移除商品、单选/取消、全选/取消、购物车列表
+
+### 学习目标
+
+* 购物车模块的设计思想
+* 如何封装一个高复用购物车核心方法
+* 解决浮点型商业运算中丢失精度的问题
+
+  * 一定要用BigDecimal的String构造器
+
+    ```java
+    public class BigDecimalUtil {
+        private BigDecimalUtil(){}
+        public static BigDecimal add(double v1,double v2){
+            BigDecimal b1 = new BigDecimal(Double.toString(v1));
+            BigDecimal b2 = new BigDecimal(Double.toString(v2));
+            return b1.add(b2);
+        }
+        public static BigDecimal sub(double v1,double v2){
+            BigDecimal b1 = new BigDecimal(Double.toString(v1));
+            BigDecimal b2 = new BigDecimal(Double.toString(v2));
+            return b1.subtract(b2);
+        }
+        public static BigDecimal mul(double v1,double v2){
+            BigDecimal b1 = new BigDecimal(Double.toString(v1));
+            BigDecimal b2 = new BigDecimal(Double.toString(v2));
+            return b1.multiply(b2);
+        }
+        public static BigDecimal div(double v1,double v2){
+            BigDecimal b1 = new BigDecimal(Double.toString(v1));
+            BigDecimal b2 = new BigDecimal(Double.toString(v2));
+            return b1.divide(b2,2,BigDecimal.ROUND_HALF_UP);//四舍五入,保留2位小数
+            //除不尽的情况
+        }
+    }
+    ```
+
+#### 添加购物车
+
+控制器add方法：
+
+1. 参数有sesssion,count,productId
+2. 从session拿取用户信息，如果user为null则返回需要登录。
+3. 如果不为null就调用iCartService.add(user.getId(),productId,count)方法
+
+业务层add方法
+
+1. 如果productId或count为null，返回参数异常
+2. 根据userId和productId查询购物车
+3. 如果这个产品不在这个购物车里,需要新增一个这个产品的记录
+4. 如果这个产品已经在购物车里了，和原本的数量相加
+
+封装了一个购物车产品的VO和购物车VO
+
+## 收货地址管理
+
+### 功能介绍：
+
+* 添加地址、删除地址、更新地址、地址列表、地址分页、地址详情
+
+### 学习目标
+
+* SpringMVC数据绑定中对象绑定
+* mybatis自动生成主键、配置和使用
+* 如何避免横向越权漏洞的顽固
